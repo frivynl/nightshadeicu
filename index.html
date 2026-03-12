@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ROBLOX.com</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="header">
+        <div class="container">
+            <span id="logo">ROBLOX</span>
+            <div id="user-stats">
+                Logged in as: <b id="username">Guest</b> | Robux: 0 | Tix: 10
+                <a href="#" class="discord-btn" id="login">Login with Discord</a>
+            </div>
+        </div>
+    </div>
+    <div class="container" style="display: flex; margin-top: 10px;">
+        <div id="sidebar">
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">My ROBLOX</a></li>
+                <li><a href="#">Games</a></li>
+                <li><a href="#">Catalog</a></li>
+                <li><a href="#">People</a></li>
+                <li><a href="#">Forum</a></li>
+                <li><a href="#">News</a></li>
+            </ul>
+        </div>
+        <div id="main-content">
+            <div class="welcome-box">
+                <h2>Welcome to ROBLOX!</h2>
+                <p>ROBLOX is a virtual playground where you can create and play games with your friends.</p>
+                <button class="roblox-button">Play Now!</button>
+            </div>
+            <div class="news-section">
+                <h3>Latest Site News</h3>
+                <hr>
+                <p><b>March 12, 2026:</b> We are testing a new Discord integration for the community!</p>
+                <p><b>Oct 12, 2006:</b> Character customization is now live in the catalog.</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        const loginBtn = document.getElementById('login');
+        loginBtn.addEventListener('click', function() {
+            alert("You are now leaving ROBLOX.com to visit a 3rd party site: Discord.");
+        });
+    </script>
+</body>
+</html>
