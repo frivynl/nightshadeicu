@@ -2,50 +2,99 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ROBLOX.com</title>
+    <title>ROBLOX.com (Alpha-test)</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="header">
-        <div class="container">
-            <span id="logo">ROBLOX</span>
-            <div id="user-stats">
-                Logged in as: <b id="username">Guest</b> | Robux: 0 | Tix: 10
-                <a href="#" class="discord-btn" id="login">Login with Discord</a>
+    <div class="container">
+        <div id="banner">
+            <div id="banner-top">
+                <span style="color: #00ff00; font-size: 11px; font-weight: bold; margin-left: 10px;">ROBLOX.com (Alpha-test)</span>
+                <span id="logo-text">ROBLOX</span>
+                <div id="login-status">
+                    Welcome, <b id="username">Guest</b> | <a href="#" id="logout" style="color: white;">Log Out</a>
+                </div>
+            </div>
+            <div id="sub-nav">
+                <a href="#">Home</a> | <a href="#">Browse</a> | <a href="#">Multiplayer</a> | <a href="#">Forum</a> | <a href="#">Info</a> <i style="color: #ccc;">Admin</i>
             </div>
         </div>
-    </div>
-    <div class="container" style="display: flex; margin-top: 10px;">
-        <div id="sidebar">
-            <ul class="nav-links">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">My ROBLOX</a></li>
-                <li><a href="#">Games</a></li>
-                <li><a href="#">Catalog</a></li>
-                <li><a href="#">People</a></li>
-                <li><a href="#">Forum</a></li>
-                <li><a href="#">News</a></li>
-            </ul>
-        </div>
-        <div id="main-content">
-            <div class="welcome-box">
-                <h2>Welcome to ROBLOX!</h2>
-                <p>ROBLOX is a virtual playground where you can create and play games with your friends.</p>
-                <button class="roblox-button">Play Now!</button>
+        <div class="flex-row">
+            <div class="content-box welcome">
+                <h2>Welcome to ROBLOX...</h2>
+                <p>Play online with others, or relax and work on your personal creation!</p>
             </div>
-            <div class="news-section">
-                <h3>Latest Site News</h3>
-                <hr>
-                <p><b>March 12, 2026:</b> We are testing a new Discord integration for the community!</p>
-                <p><b>Oct 12, 2006:</b> Character customization is now live in the catalog.</p>
+            <div class="content-box login">
+                <div id="login-ui">
+                    Username: <input type="text" style="width: 80px;"><br>
+                    Password: <input type="password" style="width: 80px;"><br>
+                    <div style="text-align: right; margin-top: 5px;">
+                        <button class="retro-btn">Log In</button>
+                        <button class="retro-btn" id="discord-login">Sign Up!</button>
+                    </div>
+                    <a href="#" style="font-size: 10px; color: blue;">Reset password</a>
+                </div>
+            </div>
+        </div>
+        <div class="flex-row">
+            <div class="place-card">
+                <div class="place-header">Cool Place</div>
+                <div class="placeholder-img">
+                    <p style="margin-top: 60px;">[ Place Screenshot ]</p>
+                </div>
+            </div>
+            <div class="newest-people">
+                <div class="people-header">Newest People</div>
+                <div class="people-grid" id="people-list">
+                    <div class="person">👤<br>11jedwards</div>
+                    <div class="person">👤<br>budmeister</div>
+                    <div class="person">👤<br>sfaksfd</div>
+                    <div class="person">👤<br>pjjster</div>
+                    <div class="person">👤<br>moviemike</div>
+                    <div class="person">👤<br>Rige</div>
+                </div>
+                <a href="#" style="float: right; color: purple; font-size: 11px; margin-top: 10px;">Browse All People</a>
             </div>
         </div>
     </div>
     <script>
-        const loginBtn = document.getElementById('login');
-        loginBtn.addEventListener('click', function() {
-            alert("You are now leaving ROBLOX.com to visit a 3rd party site: Discord.");
-        });
+        const CLIENT_ID = '1481771431137120419';
+        const REDIRECT_URI = window.location.href.split('#')[0];
+        const AUTH_URL = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify`;
+
+        function updateUI(name) {
+            document.getElementById('username').innerText = name;
+            document.getElementById('login-ui').innerHTML = `<p>Logged in as <b>${name}</b></p><p>Welcome to the Alpha!</p>`;
+        }
+
+        const savedUser = localStorage.getItem('rbx_user');
+        if (savedUser) updateUI(savedUser);
+
+        document.getElementById('discord-login').onclick = () => {
+            window.location.href = AUTH_URL;
+        };
+
+        document.getElementById('logout').onclick = () => {
+            localStorage.removeItem('rbx_user');
+            window.location.reload();
+        };
+
+        window.onload = () => {
+            const hash = window.location.hash.slice(1);
+            const params = new URLSearchParams(hash);
+            const token = params.get('access_token');
+            if (token) {
+                fetch('https://discord.com/api/users/@me', {
+                    headers: { Authorization: `Bearer ${token}` }
+                })
+                .then(res => res.json())
+                .then(user => {
+                    localStorage.setItem('rbx_user', user.username);
+                    updateUI(user.username);
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                });
+            }
+        };
     </script>
 </body>
 </html>
